@@ -15,7 +15,11 @@ router.post('/add', async (req, res) => {
 router.get('/all', async (req, res) => {
   try {
     const orders = await OrderModel.find();
-    res.status(200).json(orders);
+    if (orders.length > 0) {
+      res.status(200).json(orders);
+    } else {
+      res.status(404).send('Could not find orders.');
+    }
   } catch (err) {
     console.error(err);
     res.status(500).send('Internal server error.');
