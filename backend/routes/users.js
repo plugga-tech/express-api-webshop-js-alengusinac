@@ -18,12 +18,15 @@ router.get('/', async (req, res) => {
 
 router.post('/', async (req, res) => {
   try {
-    const user = await UserModel.find({ _id: req.body.id });
-    if (user.length > 0) {
+    const user = await UserModel.findById(req.body.id);
+    if (user) {
       res.status(200).json(user);
+    } else {
+      res.status(404).send('Could not find user.');
     }
   } catch (err) {
-    res.status(404).send('Could not find user..');
+    console.error(err);
+    res.status(500).send('Internal server error.');
   }
 });
 
@@ -40,7 +43,6 @@ router.post('/add', async (req, res) => {
 router.post('/login', async (req, res) => {
   try {
     const user = await UserModel.findOne(req.body);
-    console.log(user);
     if (user) {
       res.status(200).json(user);
     } else {
