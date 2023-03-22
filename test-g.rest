@@ -13,7 +13,7 @@ POST http://localhost:3000/api/users/
 Content-Type: application/json
 
 {
-  "id": "// EN USER ID"
+  "id": "6419af98b73291eac2e2aef7"
 }
 
 ###
@@ -24,7 +24,7 @@ Content-Type: application/json
 
 {
   "name": "Test Testsson",
-  "email": "test@mail.com",
+  "email": "test2@mail.com",
   "password": "test"
 }
 
@@ -35,8 +35,8 @@ POST http://localhost:3000/api/users/login
 Content-Type: application/json
 
 {
-  "email": "// EN USER EMAIL",
-  "password": "// EN USER EMAIL"
+  "email": "test@mail.com",
+  "password": "test"
 }
 
 ###
@@ -52,8 +52,8 @@ GET http://localhost:3000/api/products
 
 ###
 
-// HÄMTA SPECIFIK PRODUKT
-GET http://localhost:3000/api/products/ // ID PÅ PRODUKT
+// HÄMTA SPECIFIK PRODUKT med ID endpoint
+GET http://localhost:3000/api/products/6419ae7b004feb0db876712b
 
 ###
 
@@ -62,10 +62,10 @@ POST http://localhost:3000/api/products/add
 Content-Type: application/json
 
 {
-  "name": "Produkt 1",
+  "name": "Produkt 3",
   "description": "Beskrivning av produkt 1",
-  "price": 100, 
-  "lager": 10
+  "price": 300, 
+  "lager": 1
 }
 
 ###
@@ -79,14 +79,14 @@ POST http://localhost:3000/api/orders/add
 Content-Type: application/json
 
 {
-  "user": "{{getUsers.response.body.$[0].id}}",
-      "products": [
+  "user": "6419aee2004feb0db8767132",
+  "products": [
     {
-      "productId": "// ID PÅ EN PRODUKT",
+      "productId": "6419ae7b004feb0db876712b",
       "quantity": 1
     },
     {
-      "productId": "// ID PÅ EN PRODUKT",
+      "productId": "6419aeca004feb0db876712f",
       "quantity": 2
     }
   ]
