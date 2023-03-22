@@ -4,7 +4,7 @@ const UserModel = require('../models/User');
 
 router.get('/', async (req, res) => {
   try {
-    const users = await UserModel.find();
+    const users = await UserModel.find().select('name email');
     if (users.length > 0) {
       res.status(200).json(users);
     } else {
