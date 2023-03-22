@@ -12,7 +12,7 @@ function renderLogin() {
     logInElm.innerHTML = `
     <h3>Logga in:</h3>
     <div id="login-message"></div>
-    <input id="login-username" type="text" placeholder="Användarnamn"><br>
+    <input id="login-email" type="text" placeholder="E-mail"><br>
     <input id="login-password" type="text" placeholder="Lösenord"><br>
     <button id="login-btn">Logga in</button>
     <h3>Skapa användare:</h3>
@@ -25,15 +25,15 @@ function renderLogin() {
 }
 
 async function login() {
-  const username = document.querySelector('#login-username').value;
+  const email = document.querySelector('#login-email').value;
   const password = document.querySelector('#login-password').value;
   const loginMessage = document.querySelector('#login-message');
 
-  if (username && password) {
+  if (email && password) {
     loginMessage.innerHTML = '';
 
     const user = {
-      username,
+      email,
       password,
     };
 
@@ -44,8 +44,9 @@ async function login() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(user),
-      });
-      console.log(response);
+      })
+        .then((response) => response.json())
+        .then((data) => console.log(data));
     } catch (err) {
       console.error(err);
     }
