@@ -8,7 +8,7 @@ router.get('/', async (req, res) => {
     if (users.length > 0) {
       res.status(200).json(users);
     } else {
-      res.status(404).send('Could not find users.');
+      res.status(404).json({ error: 'Could not find users.' });
     }
   } catch (err) {
     console.error(err);
@@ -22,7 +22,7 @@ router.post('/', async (req, res) => {
     if (user) {
       res.status(200).json(user);
     } else {
-      res.status(404).send('Could not find user.');
+      res.status(204).json({ error: 'Could not find user.' });
     }
   } catch (err) {
     console.error(err);
@@ -46,7 +46,7 @@ router.post('/login', async (req, res) => {
     if (user) {
       res.status(200).json(user);
     } else {
-      res.status(404).send("E-mail and password don't match.");
+      res.status(204).json({ error: 'Email and password dont match.' });
     }
   } catch (err) {
     console.error(err);

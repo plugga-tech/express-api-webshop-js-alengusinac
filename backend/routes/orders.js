@@ -18,7 +18,7 @@ router.get('/all', async (req, res) => {
     if (orders.length > 0) {
       res.status(200).json(orders);
     } else {
-      res.status(404).send('Could not find orders.');
+      res.status(204).send('Could not find orders.');
     }
   } catch (err) {
     console.error(err);

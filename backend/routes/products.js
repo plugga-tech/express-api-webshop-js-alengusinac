@@ -8,7 +8,7 @@ router.get('/', async (req, res) => {
     if (products.length > 0) {
       res.status(200).json(products);
     } else {
-      res.status(404).send('Could not find any products.');
+      res.status(204).send('Could not find any products.');
     }
   } catch (err) {
     console.error(err);
@@ -22,7 +22,7 @@ router.get('/:id', async (req, res) => {
     if (product) {
       res.status(200).json(product);
     } else {
-      res.status(404).send('Could not find product.');
+      res.status(204).send('Could not find product.');
     }
   } catch (err) {
     console.error(err);
