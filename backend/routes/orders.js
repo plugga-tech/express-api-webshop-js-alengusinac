@@ -8,7 +8,7 @@ router.post('/add', async (req, res) => {
     res.status(201).json(order);
   } catch (err) {
     console.error(err);
-    res.status(500).send('Internal server error.');
+    res.status(500).json({ error: err });
   }
 });
 
@@ -22,7 +22,7 @@ router.get('/all', async (req, res) => {
     }
   } catch (err) {
     console.error(err);
-    res.status(500).send('Internal server error.');
+    res.status(500).json({ error: err });
   }
 });
 

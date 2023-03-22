@@ -12,7 +12,7 @@ router.get('/', async (req, res) => {
     }
   } catch (err) {
     console.error(err);
-    res.status(500).send('Internal server error.');
+    res.status(500).json({ error: err });
   }
 });
 
@@ -26,7 +26,7 @@ router.get('/:id', async (req, res) => {
     }
   } catch (err) {
     console.error(err);
-    res.status(500).send('Internal server error.');
+    res.status(500).json({ error: err });
   }
 });
 
@@ -36,7 +36,7 @@ router.post('/add', async (req, res) => {
     res.status(201).json(product);
   } catch (err) {
     console.error(err);
-    res.status(500).send('Internal server error.');
+    res.status(500).json({ error: err });
   }
 });
 
