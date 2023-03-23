@@ -22,7 +22,7 @@ router.post('/', async (req, res) => {
     if (user) {
       res.status(200).json(user);
     } else {
-      res.status(204).json({ error: 'Could not find user.' });
+      res.status(404).json({ error: 'Could not find user.' });
     }
   } catch (err) {
     console.error(err);
@@ -36,7 +36,11 @@ router.post('/add', async (req, res) => {
     res.status(201).json(user);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: err });
+    if (err.code === 11000) {
+      res.status(400).send(' Email is already registered.');
+    } else {
+      res.status(500).json({ error: err });
+    }
   }
 });
 
@@ -44,9 +48,10 @@ router.post('/login', async (req, res) => {
   try {
     const user = await UserModel.findOne(req.body);
     if (user) {
+      console.log(user);
       res.status(200).json(user);
     } else {
-      res.status(204).json({ error: 'Email and password dont match.' });
+      res.status(401).send({ message: "Email and password don't match." });
     }
   } catch (err) {
     console.error(err);
