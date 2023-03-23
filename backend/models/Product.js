@@ -11,7 +11,14 @@ const ProductSchema = mongoose.Schema({
     type: Number,
     required: true,
   },
-  lager: Number,
+  lager: {
+    type: Number,
+    required: true,
+  },
+  category: {
+    type: mongoose.Types.ObjectId,
+    required: true,
+  },
 });
 
 module.exports = mongoose.model('product', ProductSchema);
