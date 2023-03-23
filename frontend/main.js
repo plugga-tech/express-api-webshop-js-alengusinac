@@ -209,14 +209,18 @@ function addToCart(e) {
 function renderCart() {
   const cartContainer = document.querySelector('#cart');
   if (cart.length > 0) {
-    cartContainer.innerHTML = '';
+    cartContainer.innerHTML = '<button>Töm kundavagn</button>';
     cart.forEach((item) => {
       cartContainer.innerHTML += `
-      <h4>${item.name}</h4>
-      <p>Pris: ${item.price}kr</p>
-      <p>Antal: ${item.amount}</p>
+      <div class="cart-item">
+        <h4>${item.name}</h4>
+        <p>Pris: ${item.price}kr</p>
+        <p>Antal: ${item.amount}</p>
+        <button>Ta bort</button>
+      </div>
       `;
     });
+    cartContainer.innerHTML += `<button>Skicka order!</button>`;
   } else {
     cartContainer.innerHTML = 'Kundvagnen är tom.';
   }

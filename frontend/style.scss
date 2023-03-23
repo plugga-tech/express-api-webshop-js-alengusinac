@@ -1,3 +1,15 @@
+#cart {
+  .cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    h4, p {
+      margin: 5px;
+    }
+  }
+}
+
 #products {
   display: flex;
   flex-wrap: wrap;
