@@ -15,7 +15,7 @@ router.post('/add', async (req, res) => {
 router.get('/all/:token', async (req, res) => {
   try {
     const orders = await OrderModel.find();
-    if (req.params.token === process.env.APY_KEY) {
+    if (req.params.token === process.env.API_KEY) {
       if (orders.length > 0) {
         res.status(200).json(orders);
       } else {
@@ -33,7 +33,7 @@ router.get('/all/:token', async (req, res) => {
 router.post('/user', async (req, res) => {
   try {
     const order = await OrderModel.find({ user: req.body.user });
-    if (req.body.token === process.env.APY_KEY) {
+    if (req.body.token === process.env.API_KEY) {
       if (order.length > 0) {
         res.status(200).json(order);
       } else {

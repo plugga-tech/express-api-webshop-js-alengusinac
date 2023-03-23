@@ -5,7 +5,7 @@ const CategoryModel = require('../models/Category');
 router.post('/add', async (req, res) => {
   try {
     const category = await CategoryModel.create(req.body);
-    if (req.body.token === process.env.APY_KEY) {
+    if (req.body.token === process.env.API_KEY) {
       res.status(201).json(category);
     } else {
       res.status(401).json({ message: 'Not authorised!' });

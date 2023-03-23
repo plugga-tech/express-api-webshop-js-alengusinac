@@ -37,7 +37,7 @@ router.get('/:id', async (req, res) => {
 router.post('/add', async (req, res) => {
   try {
     const product = await ProductModel.create(req.body);
-    if (req.body.token === process.env.APY_KEY) {
+    if (req.body.token === process.env.API_KEY) {
       res.status(201).json(product);
     } else {
       res.status(401).json({ message: 'Not authorised!' });
