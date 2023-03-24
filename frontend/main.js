@@ -45,7 +45,7 @@ function renderLogin(userLoggedIn, username) {
     <input id="create-username" type="text" placeholder="Användarnamn"><br>
     <input id="create-email" type="text" placeholder="E-mail"><br>
     <input id="create-password" type="text" placeholder="Lösenord"><br>
-    <button id="create-btn">Logga in</button>
+    <button id="create-btn">Skapa</button>
     `;
     addLoginEventListeners();
   }
@@ -76,7 +76,7 @@ async function login() {
         }
       })
       .then((data) => {
-        console.log(data._id);
+        console.log(data);
         localStorage.setItem('user', data._id);
         checkLogin();
       })
@@ -117,7 +117,7 @@ async function createUser() {
           throw 'Email adressen används redan.';
         }
       })
-      .then((data) => {
+      .then(() => {
         messageContainer.innerHTML = 'Användaren har skapats.';
       })
       .catch((err) => {
@@ -238,7 +238,7 @@ function renderCart() {
       </div>
       `;
     });
-    cartContainer.innerHTML += `<button>Skicka order!</button>`;
+    cartContainer.innerHTML += `<button id="send-order">Skicka order!</button>`;
     addCartEventListeners();
   } else {
     cartContainer.innerHTML = 'Kundvagnen är tom.';
@@ -263,6 +263,52 @@ function addCartEventListeners() {
       renderCart();
     });
   });
+
+  const sendOrderBtn = document.querySelector('#send-order');
+  sendOrderBtn.addEventListener('click', createOrder);
+}
+
+function createOrder() {
+  const user = localStorage.getItem('user');
+
+  if (user) {
+    const order = {
+      user,
+      products: [],
+    };
+    cart.forEach((item) => {
+      const product = {
+        productdId: item.id,
+        quantity: item.amount,
+      };
+      order.products.push(product);
+    });
+    sendOrder(order);
+  } else {
+    alert('Du måste vara inloggad!');
+  }
+}
+
+async function sendOrder(order) {
+  fetch('http://localhost:3000/api/orders/add', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(order),
+  })
+    .then((response) => {
+      if (response.status === 201) {
+        const cartContainer = document.querySelector('#cart');
+        cartContainer.innerHTML =
+          'Din order har skickats och tagits emot, tack!';
+        cart = [];
+        localStorage.setItem('cart', JSON.stringify(cart));
+      } else {
+        alert('Något gick fel!');
+      }
+    })
+    .catch((err) => console.error(err));
 }
 
 checkLogin();
