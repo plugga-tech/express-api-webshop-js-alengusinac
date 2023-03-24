@@ -209,21 +209,42 @@ function addToCart(e) {
 function renderCart() {
   const cartContainer = document.querySelector('#cart');
   if (cart.length > 0) {
-    cartContainer.innerHTML = '<button>Töm kundavagn</button>';
+    cartContainer.innerHTML = '<button id="clear-cart">Töm kundavagn</button>';
     cart.forEach((item) => {
       cartContainer.innerHTML += `
-      <div class="cart-item">
+      <div id="${item.id}" class="cart-item">
         <h4>${item.name}</h4>
         <p>Pris: ${item.price}kr</p>
         <p>Antal: ${item.amount}</p>
-        <button>Ta bort</button>
+        <button class="remove-from-cart">Ta bort</button>
       </div>
       `;
     });
     cartContainer.innerHTML += `<button>Skicka order!</button>`;
+    addCartEventListeners();
   } else {
     cartContainer.innerHTML = 'Kundvagnen är tom.';
   }
+}
+
+function addCartEventListeners() {
+  const clearCartBtn = document.querySelector('#clear-cart');
+  clearCartBtn.addEventListener('click', () => {
+    cart = [];
+    localStorage.setItem('cart', JSON.stringify(cart));
+    renderCart();
+  });
+
+  const removeBtns = document.querySelectorAll('.remove-from-cart');
+  removeBtns.forEach((button) => {
+    button.addEventListener('click', (e) => {
+      const targetId = e.currentTarget.parentElement.id;
+      const cartItem = cart.findIndex((item) => item.id === targetId);
+      cart.splice(cartItem, 1);
+      localStorage.setItem('cart', JSON.stringify(cart));
+      renderCart();
+    });
+  });
 }
 
 checkLogin();
