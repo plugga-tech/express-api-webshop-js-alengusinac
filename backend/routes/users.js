@@ -46,12 +46,21 @@ router.post('/add', async (req, res) => {
 
 router.post('/login', async (req, res) => {
   try {
-    const user = await UserModel.findOne(req.body);
+    const user = await UserModel.findOne({ email: req.body.email });
+    const password = req.body.password;
+
     if (user) {
-      console.log(user);
-      res.status(200).json(user);
+      user.comparePassword(password, function (matchError, isMatch) {
+        if (matchError) {
+          res.status(401).send({ message: "Email and password don't match." });
+        } else if (!isMatch) {
+          res.status(401).send({ message: "Email and password don't match." });
+        } else {
+          res.status(200).json(user);
+        }
+      });
     } else {
-      res.status(401).send({ message: "Email and password don't match." });
+      res.status(401).send({ message: 'Email does not exist' });
     }
   } catch (err) {
     console.error(err);
