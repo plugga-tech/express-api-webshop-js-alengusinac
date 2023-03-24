@@ -22,7 +22,7 @@ router.post('/add', async (req, res) => {
 
 router.get('/', async (req, res) => {
   try {
-    const categories = await CategoryModel.find();
+    const categories = await CategoryModel.find().sort({ name: 'asc' });
     if (categories.length > 0) {
       res.status(200).json(categories);
     } else {
