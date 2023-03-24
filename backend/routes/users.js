@@ -37,7 +37,7 @@ router.post('/add', async (req, res) => {
   } catch (err) {
     console.error(err);
     if (err.code === 11000) {
-      res.status(400).send(' Email is already registered.');
+      res.status(400).json({ message: 'E-mail adressen används redan.' });
     } else {
       res.status(500).json({ error: err });
     }

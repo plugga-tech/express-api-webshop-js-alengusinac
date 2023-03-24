@@ -1,7 +1,6 @@
 import './style.scss';
 
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
-console.log(cart);
 
 async function checkLogin() {
   const user = { id: localStorage.getItem('user') };
@@ -73,7 +72,7 @@ async function login() {
         if (response.status === 200) {
           return response.json();
         } else {
-          throw "Email and password don't match.";
+          throw 'E-mail och lösenord matchar inte.';
         }
       })
       .then((data) => {
@@ -86,7 +85,7 @@ async function login() {
         loginMessage.innerHTML = err;
       });
   } else {
-    loginMessage.innerHTML = 'Type in username and password';
+    loginMessage.innerHTML = 'Fyll i alla fält.';
   }
 }
 
@@ -99,6 +98,7 @@ async function createUser() {
   const name = document.querySelector('#create-username').value;
   const email = document.querySelector('#create-email').value;
   const password = document.querySelector('#create-password').value;
+  const messageContainer = document.querySelector('#create-user-message');
 
   if (name && email && password) {
     const user = { name, email, password };
@@ -110,8 +110,21 @@ async function createUser() {
       },
       body: JSON.stringify(user),
     })
-      .then((response) => response.json())
-      .then((data) => console.log(data));
+      .then((response) => {
+        if (response.status === 201) {
+          return response.json();
+        } else {
+          throw 'Email adressen används redan.';
+        }
+      })
+      .then((data) => {
+        messageContainer.innerHTML = 'Användaren har skapats.';
+      })
+      .catch((err) => {
+        messageContainer.innerHTML = err;
+      });
+  } else {
+    messageContainer.innerHTML = 'Fyll i alla fält.';
   }
 }
 
@@ -199,13 +212,13 @@ function addToCart(e) {
     const updateItem = cart.find((item) => item.id === product.id);
     updateItem.amount += 1;
   } else {
-  const cartItem = {
-    id: product.id,
-    name: product.querySelector('h4').innerHTML,
-    price: product.querySelector('p').innerHTML,
-    amount: 1,
-  };
-  cart.push(cartItem);
+    const cartItem = {
+      id: product.id,
+      name: product.querySelector('h4').innerHTML,
+      price: product.querySelector('p').innerHTML,
+      amount: 1,
+    };
+    cart.push(cartItem);
   }
   localStorage.setItem('cart', JSON.stringify(cart));
   renderCart();
