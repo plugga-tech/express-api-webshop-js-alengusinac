@@ -193,8 +193,12 @@ async function getProducts(category = '') {
 }
 
 function addToCart(e) {
-  console.log(e.currentTarget.parentElement.querySelector('h4').innerHTML);
   const product = e.currentTarget.parentElement;
+
+  if (cart.find((item) => item.id === product.id)) {
+    const updateItem = cart.find((item) => item.id === product.id);
+    updateItem.amount += 1;
+  } else {
   const cartItem = {
     id: product.id,
     name: product.querySelector('h4').innerHTML,
@@ -202,6 +206,7 @@ function addToCart(e) {
     amount: 1,
   };
   cart.push(cartItem);
+  }
   localStorage.setItem('cart', JSON.stringify(cart));
   renderCart();
 }
