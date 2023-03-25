@@ -155,8 +155,17 @@ async function renderCategories() {
 
 async function getCategories() {
   const categories = await fetch('http://localhost:3000/api/categories')
-    .then((response) => response.json())
-    .catch((err) => console.error(err));
+    .then((response) => {
+      if (response.status === 200) {
+        return response.json();
+      } else {
+        throw 'Det fanns inga kategorier.';
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      return [];
+    });
 
   return categories;
 }
@@ -199,8 +208,7 @@ async function renderProducts(category = '') {
       button.addEventListener('click', addToCart);
     });
   } else {
-    productsContainer.innerHTML =
-      'Det fanns inga produkter i den här kategorin.';
+    productsContainer.innerHTML = 'Det fanns inga produkter att visa.';
   }
 }
 
@@ -210,7 +218,7 @@ async function getProducts(category = '') {
       if (response.status === 200) {
         return response.json();
       } else {
-        throw 'Det fanns inga produkter i den här kategorin.';
+        throw 'Det fanns inga produkter att visa.';
       }
     })
     .catch((err) => {

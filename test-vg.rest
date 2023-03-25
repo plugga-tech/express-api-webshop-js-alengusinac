@@ -64,7 +64,7 @@ Content-Type: application/json
   "description": "Beskrivning av produkt 1",
   "price": 100,
   "lager": 10,
-  "category": "641c62bf771c98452b767806",
+  "category": "641f10a227ded2f8ea852b09",
   "token": "1234key1234"
 }
 
