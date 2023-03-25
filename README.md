@@ -1,8 +1,11 @@
 # Välkommen!
 
 Front end är byggd på vite och kan enkelt startas via att köra 
+
 npm install
-och sedan 
+
+och sedan
+
 npm run dev.
 
 Taco hej!
