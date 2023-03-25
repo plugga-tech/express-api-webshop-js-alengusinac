@@ -1,10 +1,17 @@
 var express = require('express');
 var router = express.Router();
 const OrderModel = require('../models/Order');
+const ProductModel = require('../models/Product');
 
 router.post('/add', async (req, res) => {
   try {
     const order = await OrderModel.create(req.body);
+    const products = req.body.products;
+    products.map(async (product) => {
+      const findProduct = await ProductModel.findById(product.productId);
+      findProduct.lager -= product.quantity;
+      findProduct.save();
+    });
     res.status(201).json(order);
   } catch (err) {
     console.error(err);

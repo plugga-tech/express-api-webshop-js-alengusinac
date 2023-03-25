@@ -1,5 +1,7 @@
 import './style.scss';
 
+const getOrdersBtn = document.querySelector('#get-orders-btn');
+
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
 async function checkLogin() {
@@ -181,26 +183,40 @@ async function renderProducts(category = '') {
 
   productsContainer.innerHTML = '';
 
-  products.map((product) => {
-    productsContainer.innerHTML += `
-    <div class="product" id="${product._id}">
-      <img src="/img/product.webp">
-      <h4>${product.name}</h4>
-      <p>${product.price}</p>
-      <button class="add-to-cart">+</button>
-    </div>
-    `;
-  });
-  const buttons = document.querySelectorAll('.add-to-cart');
-  buttons.forEach((button) => {
-    button.addEventListener('click', addToCart);
-  });
+  if (products.length > 0) {
+    products.map((product) => {
+      productsContainer.innerHTML += `
+      <div class="product" id="${product._id}">
+        <img src="/img/product.webp">
+        <h4>${product.name}</h4>
+        <p>${product.price}kr</p>
+        <button class="add-to-cart">+</button>
+      </div>
+      `;
+    });
+    const buttons = document.querySelectorAll('.add-to-cart');
+    buttons.forEach((button) => {
+      button.addEventListener('click', addToCart);
+    });
+  } else {
+    productsContainer.innerHTML =
+      'Det fanns inga produkter i den här kategorin.';
+  }
 }
 
 async function getProducts(category = '') {
   const products = await fetch('http://localhost:3000/api/products' + category)
-    .then((response) => response.json())
-    .catch((err) => console.error(err));
+    .then((response) => {
+      if (response.status === 200) {
+        return response.json();
+      } else {
+        throw 'Det fanns inga produkter i den här kategorin.';
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      return [];
+    });
 
   return products;
 }
@@ -232,7 +248,7 @@ function renderCart() {
       cartContainer.innerHTML += `
       <div id="${item.id}" class="cart-item">
         <h4>${item.name}</h4>
-        <p>Pris: ${item.price}kr</p>
+        <p>Pris: ${item.price}</p>
         <p>Antal: ${item.amount}</p>
         <button class="remove-from-cart">Ta bort</button>
       </div>
@@ -278,7 +294,7 @@ function createOrder() {
     };
     cart.forEach((item) => {
       const product = {
-        productdId: item.id,
+        productId: item.id,
         quantity: item.amount,
       };
       order.products.push(product);
@@ -311,7 +327,56 @@ async function sendOrder(order) {
     .catch((err) => console.error(err));
 }
 
-checkLogin();
-renderCart();
-renderCategories();
-renderProducts();
+async function getOrders() {
+  const apiKey = document.querySelector('#api-input').value;
+
+  if (apiKey) {
+    fetch('http://localhost:3000/api/orders/all/' + apiKey)
+      .then((response) => {
+        if (response.status === 200) {
+          return response.json();
+        } else {
+          throw 'Not authorised!';
+        }
+      })
+      .then((data) => renderOrders(data))
+      .catch((err) => {
+        alert(err);
+      });
+  } else {
+    document.querySelector('#order-message').innerHTML = 'Fyll i fältet.';
+  }
+}
+
+function renderOrders(orders) {
+  document.body.innerHTML = `
+  <button><a href="">Tillbaka</a></button>
+  <h1>Ordrar</h1>
+  `;
+
+  orders.map((order) => {
+    document.body.innerHTML += `
+    <div class="order">
+      <h4>Ordernummer: ${order._id}</h4>
+      <p>Kund: ${order.user}</p>
+      ${order.products.map((product) => {
+        return `
+        Produkt: ${product.productId[0]}<br>
+        ${product.quantity} st<br>
+        `;
+      })}
+    </div>
+    `;
+  });
+}
+
+function init() {
+  checkLogin();
+  renderCart();
+  renderCategories();
+  renderProducts();
+}
+
+getOrdersBtn.addEventListener('click', getOrders);
+
+init();
